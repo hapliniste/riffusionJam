@@ -13,6 +13,9 @@ import Pause from "../components/Pause";
 import PromptPanel from "../components/PromptPanel";
 import ThreeCanvas from "../components/ThreeCanvas";
 
+import RecordButton from '../components/RecordButton';
+import SegmentBank from '../components/SegmentBank';
+
 import { samplePrompts, initialSeeds, initialSeedImageMap } from "../samplePrompts";
 
 import {
@@ -70,6 +73,29 @@ export default function Home() {
   // Currently playing result, from the audio player
   const [nowPlayingResult, setNowPlayingResult] =
     useState<InferenceResult>(null);
+
+  
+
+
+    //CODE TO MANAGE RECORDING
+    const [recording, setRecording] = useState(false);
+    const [segments, setSegments] = useState([]);
+  
+    const handleStartRecording = () => {
+      // Prompt user for permission to use microphone and start recording
+    };
+  
+    const handleStopRecording = () => {
+      // Stop recording and add recorded segment to the segment bank
+    };
+  
+    const handleToggleSegment = (segment) => {
+      // Enable or disable the specified segment
+    };
+
+
+
+
 
   // Set the initial seed from the URL if available
   const router = useRouter();
@@ -379,6 +405,9 @@ export default function Home() {
           seedImage={seedImageId}
           setSeedImage={setSeedImageId}
         />
+
+      <RecordButton recording={recording} onStartRecording={handleStartRecording} onStopRecording={handleStopRecording} />
+      <SegmentBank segments={segments} onToggleSegment={handleToggleSegment} />
       </div>
     </>
   );
