@@ -1,3 +1,8 @@
+# Riffusion Jam
+
+Riffusion Jam isa fork of Riffusion App that let the user record loops from their microphone and use them as a seed for the generation.
+More features will come after that initial goal.
+
 # Riffusion App
 
 Riffusion is an app for real-time music generation with stable diffusion.
