@@ -20,11 +20,16 @@ const RecordButton = ({ recording, onStartRecording, onStopRecording, onSegmentR
 
     useEffect(() => {
         if (recording) {
+            const options = {
+                audioBitsPerSecond: 128000,
+                mimeType: "audio/webm;codecs=opus",
+              };
+
             // Initialize media recorder
             navigator.mediaDevices
                 .getUserMedia({ audio: true })
                 .then(mediaStream => {
-                    mediaRecorder = new MediaRecorder(mediaStream);
+                    mediaRecorder = new MediaRecorder(mediaStream, options);
 
                     console.log("STARTING MEDIA STREAM")
 
@@ -36,9 +41,14 @@ const RecordButton = ({ recording, onStartRecording, onStopRecording, onSegmentR
         } else {
             if (mediaRecorderRef.current) {
                 mediaRecorderRef.current.stop();
+                //try{mediaRecorderRef.current.stop();}
+                //catch{}
 
                 // Stop recording and return last 4 seconds of recording as a single Blob
-                const buffer = new Blob(chunksRef.current.slice(-Math.ceil(bufferLength * parseInt(mediaRecorderRef.current.mimeType.split('/')[1]))), { type: mediaRecorderRef.current.mimeType });
+                //const buffer = new Blob(chunksRef.current.slice(-Math.ceil(bufferLength * parseInt(mediaRecorderRef.current.mimeType.split('/')[1]))), { type: mediaRecorderRef.current.mimeType });
+                const buffer = new Blob(chunksRef.current.slice(-Math.ceil(bufferLength * mediaRecorderRef.current.audioBitsPerSecond)), { type: mediaRecorderRef.current.mimeType });
+                console.log("Bits per second:")
+                console.log(mediaRecorderRef.current.audioBitsPerSecond);
                 console.log("SEGMENTS SHOULD BE SENT")
                 console.log(buffer)
                 onSegmentReady(buffer);

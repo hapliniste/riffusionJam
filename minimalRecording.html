@@ -1,0 +1,48 @@
+<button id="record-button">Record</button>
+<button id="play-button">Play</button>
+<audio id="audio"></audio>
+
+<script>
+const recordButton = document.getElementById('record-button');
+const playButton = document.getElementById('play-button');
+const audioElement = document.getElementById('audio');
+
+let mediaRecorder;
+let audioBlob = new Blob();
+
+recordButton.addEventListener('click', () => {
+  navigator.mediaDevices
+    .getUserMedia({ audio: true })
+    .then(mediaStream => {
+      mediaRecorder = new MediaRecorder(mediaStream);
+
+      mediaRecorder.start();
+      console.log('Recording started');
+      mediaRecorder.addEventListener('dataavailable', event => {
+        audioBlob = event.data;
+        console.log('Data available');
+		console.log("AUDIO BLOB:");
+		console.log(audioBlob);
+		if (audioBlob) {
+			console.log('Playing audio');
+			const audioUrl = URL.createObjectURL(audioBlob);
+			audioElement.src = audioUrl;
+			audioElement.play();
+			audioElement.addEventListener('ended', () => {
+			URL.revokeObjectURL(audioUrl)
+			console.log("Audio ended");
+			});
+		} else {
+			console.error('No audio data available');
+		}
+      });
+    })
+    .catch(error => {
+      console.error('Error accessing microphone:', error);
+    });
+});
+
+playButton.addEventListener('click', () => {
+  mediaRecorder.stop();
+});
+</script>
